@@ -1,0 +1,316 @@
+{
+  "status": "open",
+  "pilot": true,
+  "is_test": false,
+  "study_id": "ai-health-vignette",
+  "version": "pilot-2026-10-29-v1",
+  "title": "生成式AI健康信息与判断研究｜预测试新稿",
+  "description": "这是一份重新编制的预测试问卷，预计需要12—15分钟。请按你对虚构情景的真实感受作答。",
+  "consent": "这是一份新编预测试问卷，研究人们如何理解生成式AI提供的健康信息；题目尚未完成信效度检验。预计需要12—15分钟。情景完全虚构，只用于研究，不提供诊断或治疗建议。参与完全自愿；你可以在提交前随时关闭页面退出，不会受到不利影响。问卷不要求填写姓名、联系方式、具体病史或其他人的信息。提交的选项、随机情景与作答时间将存入研究者的Supabase数据库（美国区域），用于问卷预测试及汇总分析；托管服务可能产生基本访问日志。浏览器本标签页会临时保存作答草稿；共享设备上退出时请点击“退出并清除进度”。匿名提交后，研究者可能无法定位并撤回你的个人答卷。若有疑问，请联系邀请你填写问卷的研究者。勾选同意表示：我已年满18岁，能够阅读中文，理解以上说明，并自愿参与。",
+  "sections": [
+    {
+      "id": "screening",
+      "title": "使用经历",
+      "description": "请按你的真实情况作答。",
+      "field_ids": [
+        "age_band",
+        "ai_experience",
+        "health_ai_experience",
+        "health_ai_recency",
+        "ai_frequency",
+        "source_check_frequency"
+      ]
+    },
+    {
+      "id": "PAEA",
+      "title": "对信息来源的看法",
+      "description": "1＝非常不同意，7＝非常同意。没有标准答案。",
+      "field_ids": [
+        "PAEA_1",
+        "PAEA_2",
+        "PAEA_3",
+        "PAEA_4",
+        "PAEA_5",
+        "PAEA_6"
+      ]
+    },
+    {
+      "id": "ST",
+      "title": "当前情景中的信任",
+      "description": "1＝非常不同意，7＝非常同意。没有标准答案。",
+      "field_ids": [
+        "ST_1",
+        "ST_2",
+        "ST_3",
+        "ST_4",
+        "ST_5",
+        "ST_R1"
+      ]
+    },
+    {
+      "id": "JD",
+      "title": "任务如何分担",
+      "description": "1＝非常不同意，7＝非常同意。没有标准答案。",
+      "field_ids": [
+        "JD_1",
+        "JD_2",
+        "JD_3",
+        "JD_4",
+        "JD_5",
+        "JD_6",
+        "JD_R1"
+      ]
+    },
+    {
+      "id": "EC",
+      "title": "理解与把握信息的条件",
+      "description": "1＝非常不同意，7＝非常同意。没有标准答案。",
+      "field_ids": [
+        "EC_1",
+        "EC_2",
+        "EC_3",
+        "EC_4",
+        "EC_5",
+        "EC_6",
+        "EC_7",
+        "EC_8",
+        "EC_R1"
+      ]
+    },
+    {
+      "id": "EA",
+      "title": "主动思考与验证",
+      "description": "1＝非常不同意，7＝非常同意。没有标准答案。",
+      "field_ids": [
+        "EA_1",
+        "EA_2",
+        "EA_3",
+        "EA_4",
+        "EA_5",
+        "EA_R1"
+      ]
+    },
+    {
+      "id": "ERT",
+      "title": "可能采取的互动方式",
+      "description": "1＝非常不同意，7＝非常同意。没有标准答案。",
+      "field_ids": [
+        "ERT_ABSTAIN",
+        "ERT_INSTRUMENT",
+        "ERT_CONTINGENT",
+        "ERT_COAGENCY",
+        "ERT_DISPLACE"
+      ]
+    },
+    {
+      "id": "controls",
+      "title": "一般信息",
+      "description": "请按实际情况作答。后续陈述按1—7分选择。",
+      "field_ids": [
+        "education",
+        "gender",
+        "digital_confidence",
+        "health_info_find",
+        "health_info_understand",
+        "health_info_appraise",
+        "health_topic_familiarity"
+      ]
+    },
+    {
+      "id": "checks",
+      "title": "对刚才回应的印象",
+      "description": "1＝非常不同意，7＝非常同意。没有标准答案。",
+      "field_ids": [
+        "MC_explanation",
+        "MC_verification"
+      ]
+    }
+  ],
+  "field_labels": {
+    "PAEA_1": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "PAEA_2": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "PAEA_3": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "PAEA_4": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "PAEA_5": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "PAEA_6": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "ST_1": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "ST_2": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "ST_3": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "ST_4": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "ST_5": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "ST_R1": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "JD_1": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "JD_2": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "JD_3": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "JD_4": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "JD_5": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "JD_6": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "JD_R1": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EC_1": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EC_2": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EC_3": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EC_4": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EC_5": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EC_6": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EC_7": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EC_8": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EC_R1": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EA_1": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EA_2": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EA_3": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EA_4": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EA_5": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "EA_R1": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "ERT_ABSTAIN": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "ERT_INSTRUMENT": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "ERT_CONTINGENT": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "ERT_COAGENCY": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "ERT_DISPLACE": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "digital_confidence": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "health_info_find": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "health_info_understand": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "health_info_appraise": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "health_topic_familiarity": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "MC_explanation": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    },
+    "MC_verification": {
+      "min_label": "非常不同意",
+      "max_label": "非常同意"
+    }
+  },
+  "debrief": "感谢参与。你阅读的情景与AI回应均为研究者为预测试编写的虚构材料，不代表真实的专业意见。题目仍在修订中，研究者不会根据这些回答为你进行健康判断或给出人机关系类型诊断。"
+}

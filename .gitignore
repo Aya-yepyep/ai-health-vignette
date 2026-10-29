@@ -1,0 +1,8 @@
+# Never publish credentials, response exports, or local browser state.
+.env
+.env.*
+*.csv
+*_export*.json
+*evidence*.json
+ui-test*
+__pycache__/

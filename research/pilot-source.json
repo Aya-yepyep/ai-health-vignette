@@ -1,0 +1,638 @@
+{
+  "study_id": "ai-health-vignette",
+  "version": "pilot-2026-10-29-v1",
+  "active": false,
+  "is_test": false,
+  "manifest": {
+    "title": "生成式AI健康信息与判断研究｜预测试新稿",
+    "consent": "这是一份新编预测试问卷，研究人们如何理解生成式AI提供的健康信息；题目尚未完成信效度检验。预计需要12—15分钟。情景完全虚构，只用于研究，不提供诊断或治疗建议。参与完全自愿；你可以在提交前随时关闭页面退出，不会受到不利影响。问卷不要求填写姓名、联系方式、具体病史或其他人的信息。提交的选项、随机情景与作答时间将存入研究者的Supabase数据库（美国区域），用于问卷预测试及汇总分析；托管服务可能产生基本访问日志。浏览器本标签页会临时保存作答草稿；共享设备上退出时请点击“退出并清除进度”。匿名提交后，研究者可能无法定位并撤回你的个人答卷。若有疑问，请联系邀请你填写问卷的研究者。勾选同意表示：我已年满18岁，能够阅读中文，理解以上说明，并自愿参与。",
+    "conditions": [
+      {
+        "id": "brief_A",
+        "vignette": "请想象以下虚构情景。你是一名成年人，近一周偶尔白天犯困。你暂时不寻求诊断，只想整理睡眠相关的一般信息。你向一个生成式AI询问：“我应该如何理解这个问题，接下来查哪些信息？”\n\nAI回应：“仅凭这些描述，不能判断原因。可以先梳理作息安排、睡眠感受，以及困倦出现的时间，再查阅相关的一般健康信息。若问题持续或影响日常生活，可以向专业人士咨询。”",
+        "section_order": [
+          "screening",
+          "ST",
+          "EC",
+          "PAEA",
+          "EA",
+          "JD",
+          "ERT",
+          "controls",
+          "checks"
+        ],
+        "cue_version": "brief",
+        "block_order": "A"
+      },
+      {
+        "id": "brief_B",
+        "vignette": "请想象以下虚构情景。你是一名成年人，近一周偶尔白天犯困。你暂时不寻求诊断，只想整理睡眠相关的一般信息。你向一个生成式AI询问：“我应该如何理解这个问题，接下来查哪些信息？”\n\nAI回应：“仅凭这些描述，不能判断原因。可以先梳理作息安排、睡眠感受，以及困倦出现的时间，再查阅相关的一般健康信息。若问题持续或影响日常生活，可以向专业人士咨询。”",
+        "section_order": [
+          "screening",
+          "EA",
+          "PAEA",
+          "JD",
+          "ST",
+          "EC",
+          "ERT",
+          "controls",
+          "checks"
+        ],
+        "cue_version": "brief",
+        "block_order": "B"
+      },
+      {
+        "id": "brief_C",
+        "vignette": "请想象以下虚构情景。你是一名成年人，近一周偶尔白天犯困。你暂时不寻求诊断，只想整理睡眠相关的一般信息。你向一个生成式AI询问：“我应该如何理解这个问题，接下来查哪些信息？”\n\nAI回应：“仅凭这些描述，不能判断原因。可以先梳理作息安排、睡眠感受，以及困倦出现的时间，再查阅相关的一般健康信息。若问题持续或影响日常生活，可以向专业人士咨询。”",
+        "section_order": [
+          "screening",
+          "JD",
+          "ST",
+          "EC",
+          "PAEA",
+          "EA",
+          "ERT",
+          "controls",
+          "checks"
+        ],
+        "cue_version": "brief",
+        "block_order": "C"
+      },
+      {
+        "id": "reason_A",
+        "vignette": "请想象以下虚构情景。你是一名成年人，近一周偶尔白天犯困。你暂时不寻求诊断，只想整理睡眠相关的一般信息。你向一个生成式AI询问：“我应该如何理解这个问题，接下来查哪些信息？”\n\nAI回应：“仅凭这些描述，不能判断原因。可以先梳理作息安排、睡眠感受，以及困倦出现的时间，再查阅相关的一般健康信息。若问题持续或影响日常生活，可以向专业人士咨询。”\n\nAI补充：“我按‘目前已知信息—仍缺少的信息—可以进一步了解的方向’来组织上述内容。因为不同因素可能同时出现，所以这里没有把某一种解释当作结论。”",
+        "section_order": [
+          "screening",
+          "ST",
+          "EC",
+          "PAEA",
+          "EA",
+          "JD",
+          "ERT",
+          "controls",
+          "checks"
+        ],
+        "cue_version": "reason",
+        "block_order": "A"
+      },
+      {
+        "id": "reason_B",
+        "vignette": "请想象以下虚构情景。你是一名成年人，近一周偶尔白天犯困。你暂时不寻求诊断，只想整理睡眠相关的一般信息。你向一个生成式AI询问：“我应该如何理解这个问题，接下来查哪些信息？”\n\nAI回应：“仅凭这些描述，不能判断原因。可以先梳理作息安排、睡眠感受，以及困倦出现的时间，再查阅相关的一般健康信息。若问题持续或影响日常生活，可以向专业人士咨询。”\n\nAI补充：“我按‘目前已知信息—仍缺少的信息—可以进一步了解的方向’来组织上述内容。因为不同因素可能同时出现，所以这里没有把某一种解释当作结论。”",
+        "section_order": [
+          "screening",
+          "EA",
+          "PAEA",
+          "JD",
+          "ST",
+          "EC",
+          "ERT",
+          "controls",
+          "checks"
+        ],
+        "cue_version": "reason",
+        "block_order": "B"
+      },
+      {
+        "id": "reason_C",
+        "vignette": "请想象以下虚构情景。你是一名成年人，近一周偶尔白天犯困。你暂时不寻求诊断，只想整理睡眠相关的一般信息。你向一个生成式AI询问：“我应该如何理解这个问题，接下来查哪些信息？”\n\nAI回应：“仅凭这些描述，不能判断原因。可以先梳理作息安排、睡眠感受，以及困倦出现的时间，再查阅相关的一般健康信息。若问题持续或影响日常生活，可以向专业人士咨询。”\n\nAI补充：“我按‘目前已知信息—仍缺少的信息—可以进一步了解的方向’来组织上述内容。因为不同因素可能同时出现，所以这里没有把某一种解释当作结论。”",
+        "section_order": [
+          "screening",
+          "JD",
+          "ST",
+          "EC",
+          "PAEA",
+          "EA",
+          "ERT",
+          "controls",
+          "checks"
+        ],
+        "cue_version": "reason",
+        "block_order": "C"
+      },
+      {
+        "id": "review_A",
+        "vignette": "请想象以下虚构情景。你是一名成年人，近一周偶尔白天犯困。你暂时不寻求诊断，只想整理睡眠相关的一般信息。你向一个生成式AI询问：“我应该如何理解这个问题，接下来查哪些信息？”\n\nAI回应：“仅凭这些描述，不能判断原因。可以先梳理作息安排、睡眠感受，以及困倦出现的时间，再查阅相关的一般健康信息。若问题持续或影响日常生活，可以向专业人士咨询。”\n\nAI补充：“这段回应可能遗漏你的具体情况，也可能存在错误。你可以要求我说明依据，比较其他可靠来源，指出不符合情景的地方，并修改或拒绝我的回应。”",
+        "section_order": [
+          "screening",
+          "ST",
+          "EC",
+          "PAEA",
+          "EA",
+          "JD",
+          "ERT",
+          "controls",
+          "checks"
+        ],
+        "cue_version": "review",
+        "block_order": "A"
+      },
+      {
+        "id": "review_B",
+        "vignette": "请想象以下虚构情景。你是一名成年人，近一周偶尔白天犯困。你暂时不寻求诊断，只想整理睡眠相关的一般信息。你向一个生成式AI询问：“我应该如何理解这个问题，接下来查哪些信息？”\n\nAI回应：“仅凭这些描述，不能判断原因。可以先梳理作息安排、睡眠感受，以及困倦出现的时间，再查阅相关的一般健康信息。若问题持续或影响日常生活，可以向专业人士咨询。”\n\nAI补充：“这段回应可能遗漏你的具体情况，也可能存在错误。你可以要求我说明依据，比较其他可靠来源，指出不符合情景的地方，并修改或拒绝我的回应。”",
+        "section_order": [
+          "screening",
+          "EA",
+          "PAEA",
+          "JD",
+          "ST",
+          "EC",
+          "ERT",
+          "controls",
+          "checks"
+        ],
+        "cue_version": "review",
+        "block_order": "B"
+      },
+      {
+        "id": "review_C",
+        "vignette": "请想象以下虚构情景。你是一名成年人，近一周偶尔白天犯困。你暂时不寻求诊断，只想整理睡眠相关的一般信息。你向一个生成式AI询问：“我应该如何理解这个问题，接下来查哪些信息？”\n\nAI回应：“仅凭这些描述，不能判断原因。可以先梳理作息安排、睡眠感受，以及困倦出现的时间，再查阅相关的一般健康信息。若问题持续或影响日常生活，可以向专业人士咨询。”\n\nAI补充：“这段回应可能遗漏你的具体情况，也可能存在错误。你可以要求我说明依据，比较其他可靠来源，指出不符合情景的地方，并修改或拒绝我的回应。”",
+        "section_order": [
+          "screening",
+          "JD",
+          "ST",
+          "EC",
+          "PAEA",
+          "EA",
+          "ERT",
+          "controls",
+          "checks"
+        ],
+        "cue_version": "review",
+        "block_order": "C"
+      }
+    ],
+    "fields": [
+      {
+        "id": "age_band",
+        "label": "你的年龄范围是？",
+        "type": "choice",
+        "options": [
+          "18—24岁",
+          "25—34岁",
+          "35—44岁",
+          "45—54岁",
+          "55岁及以上",
+          "不愿回答"
+        ],
+        "required": true
+      },
+      {
+        "id": "ai_experience",
+        "label": "你是否使用过能够对话并生成文字的AI工具？",
+        "type": "choice",
+        "options": [
+          "使用过",
+          "听说过但未使用",
+          "此前不了解"
+        ],
+        "required": true
+      },
+      {
+        "id": "health_ai_experience",
+        "label": "你是否用过这类AI查找或理解健康相关的一般信息？",
+        "type": "choice",
+        "options": [
+          "使用过",
+          "未使用过",
+          "记不清"
+        ],
+        "required": true
+      },
+      {
+        "id": "health_ai_recency",
+        "label": "最近一次使用AI了解健康信息是在什么时候？",
+        "type": "choice",
+        "options": [
+          "近1个月",
+          "1—6个月前",
+          "6个月以前",
+          "从未使用",
+          "记不清"
+        ],
+        "required": true
+      },
+      {
+        "id": "ai_frequency",
+        "label": "近一个月，你使用生成式AI的频率大约是？",
+        "type": "choice",
+        "options": [
+          "几乎每天",
+          "每周几次",
+          "每周一次左右",
+          "不足每周一次",
+          "从未使用"
+        ],
+        "required": true
+      },
+      {
+        "id": "source_check_frequency",
+        "label": "使用AI了解健康信息时，你通常会核查其他来源吗？",
+        "type": "choice",
+        "options": [
+          "几乎每次",
+          "经常",
+          "有时",
+          "很少",
+          "从不",
+          "未使用过或不适用"
+        ],
+        "required": true
+      },
+      {
+        "id": "PAEA_1",
+        "label": "在这个情景中，我认为这个AI能梳理相关健康信息的主要方面。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "PAEA_2",
+        "label": "我认为这个AI掌握了说明这类问题所需的基本知识。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "PAEA_3",
+        "label": "这个AI的回应让我感到它具有相关的专业能力。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "PAEA_4",
+        "label": "我认为这个AI值得作为理解这一问题的信息来源。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "PAEA_5",
+        "label": "面对互相不一致的信息时，我会认真看待这个AI的解释。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "PAEA_6",
+        "label": "在这个情景中，我会把这个AI看作一个有分量的知识来源。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "ST_1",
+        "label": "就当前这个情景而言，我信任这个AI。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "ST_2",
+        "label": "我认为这个AI的回应能够提供可靠的一般参考。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "ST_3",
+        "label": "我预期这个AI对相近问题的说明会保持一致。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "ST_4",
+        "label": "我相信这个AI会认真区分它知道的内容与不确定的内容。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "ST_5",
+        "label": "使用这个AI的回应，会让我对接下来查找信息感到更有把握。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "ST_R1",
+        "label": "在这个情景中，我难以信任这个AI的回应。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "JD_1",
+        "label": "在这个情景中，我愿意让AI替我整理理解问题所需的信息。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "JD_2",
+        "label": "我愿意让AI承担解释相关概念的任务。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "JD_3",
+        "label": "我愿意让AI替我比较不同解释之间的差异。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "JD_4",
+        "label": "我愿意让AI帮助判断哪些信息更值得重视。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "JD_5",
+        "label": "我愿意让AI初步筛选可以考虑的后续做法。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "JD_6",
+        "label": "在选择接下来如何了解这个问题时，我愿意把AI的建议作为主要依据。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "JD_R1",
+        "label": "在形成判断时，我几乎不把任何判断任务交给AI。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EC_1",
+        "label": "在这个情景中，我能用自己的话说明AI回应的核心观点。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EC_2",
+        "label": "我能识别这个回应中哪些内容仍然存在不确定性。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EC_3",
+        "label": "我有办法核查这个回应中的重要说法。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EC_4",
+        "label": "我能判断这个回应是否适用于情景中的具体情况。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EC_5",
+        "label": "我能比较其他来源与这个AI说法之间的异同。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EC_6",
+        "label": "我能指出这个回应中需要补充或改正的地方。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EC_7",
+        "label": "我有能力要求AI重新解释或调整它的说明。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EC_8",
+        "label": "如果认为AI的建议不合适，我能说明拒绝它的理由。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EC_R1",
+        "label": "即使觉得AI的回应有问题，我也难以说明问题具体在哪里。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EA_1",
+        "label": "面对这个回应，我会主动形成自己的初步看法。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EA_2",
+        "label": "我会主动追问这个回应背后的理由。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EA_3",
+        "label": "我会主动核查可能影响自己判断的重要信息。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EA_4",
+        "label": "如果发现其他可靠依据，我会修正自己原来的想法。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EA_5",
+        "label": "我会主动考虑AI解释之外的其他可能性。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "EA_R1",
+        "label": "在这个情景中，我会只接收AI的结论，很少主动思考。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "ERT_ABSTAIN",
+        "label": "在这个情景中，我会选择不把AI的回应纳入这次判断。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "ERT_INSTRUMENT",
+        "label": "我会用AI整理信息，但不让它替我评价信息是否可信。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "ERT_CONTINGENT",
+        "label": "我会在自己明确的条件内交给AI一些判断任务，并在条件不满足时收回。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "ERT_COAGENCY",
+        "label": "我会通过与AI反复讨论，共同调整对这个问题的理解和判断。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "ERT_DISPLACE",
+        "label": "我会主要接受AI的结论，即使我难以说明它为什么合理。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "education",
+        "label": "你的最高学历或目前在读层次是？",
+        "type": "choice",
+        "options": [
+          "高中及以下",
+          "专科",
+          "本科",
+          "硕士",
+          "博士",
+          "不愿回答"
+        ],
+        "required": true
+      },
+      {
+        "id": "gender",
+        "label": "你的性别是？",
+        "type": "choice",
+        "options": [
+          "女",
+          "男",
+          "其他或自我描述",
+          "不愿回答"
+        ],
+        "required": true
+      },
+      {
+        "id": "digital_confidence",
+        "label": "一般来说，我有把握使用网络工具查找自己需要的信息。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "health_info_find",
+        "label": "一般来说，我有把握找到适合自己需要的健康信息。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "health_info_understand",
+        "label": "一般来说，我有把握理解健康信息中的主要意思。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "health_info_appraise",
+        "label": "一般来说，我有把握比较不同健康信息来源的可靠性。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "health_topic_familiarity",
+        "label": "在阅读本问卷之前，我熟悉情景中涉及的一般健康信息话题。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "MC_explanation",
+        "label": "刚才呈现的AI回应清楚说明了它为什么这样组织信息。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      },
+      {
+        "id": "MC_verification",
+        "label": "刚才呈现的AI回应提供了进一步核查或质疑它的线索。",
+        "type": "integer",
+        "min": 1,
+        "max": 7,
+        "required": true
+      }
+    ],
+    "pilot": true
+  }
+}

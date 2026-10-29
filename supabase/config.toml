@@ -1,0 +1,4 @@
+[functions.collect-vignette]
+# Modern publishable keys are not JWTs. index.ts validates the apikey header
+# against the function's SUPABASE_PUBLISHABLE_KEYS environment dictionary.
+verify_jwt = false
