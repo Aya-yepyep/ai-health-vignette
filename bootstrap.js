@@ -5,7 +5,7 @@ const ARCHIVE_PATH_RE = /^(?:\.\/)?research\/archive\/[A-Za-z0-9][A-Za-z0-9._-]*
 const plain = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 
 export class DraftRecoveryError extends Error {
-  constructor(message, cause) { super(message, {cause}); this.name = 'DraftRecoveryError'; }
+  constructor(message, cause, code = '') { super(message, {cause}); this.name = 'DraftRecoveryError'; this.code = code; }
 }
 
 function validFields(fields) {
@@ -52,34 +52,41 @@ export function isResumableDraft(draft, studyId, version, now = Date.now(), isTe
   return draft.pendingAnswers === undefined || validPartialAnswers(draft.pendingAnswers, session.fields);
 }
 
-async function fetchManifest(fetchImpl, url) {
-  const response = await fetchImpl(url, {cache: 'no-store', credentials: 'omit', redirect: 'error'});
-  if (!response.ok) throw new Error('Manifest unavailable');
-  const manifest = await response.json();
-  if (!plain(manifest) || typeof manifest.study_id !== 'string' || !STUDY_RE.test(manifest.study_id) ||
-      typeof manifest.version !== 'string' || !VERSION_RE.test(manifest.version)) {
-    throw new Error('Invalid manifest identity');
+async function fetchManifest(fetchImpl, url, timeoutMs) {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetchImpl(url, {cache: 'no-store', credentials: 'omit', redirect: 'error', signal: controller.signal});
+    if (!response.ok) throw new Error('Manifest unavailable');
+    const manifest = await response.json();
+    if (!plain(manifest) || typeof manifest.study_id !== 'string' || !STUDY_RE.test(manifest.study_id) ||
+        typeof manifest.version !== 'string' || !VERSION_RE.test(manifest.version)) {
+      throw new Error('Invalid manifest identity');
+    }
+    return manifest;
+  } finally {
+    clearTimeout(timeout);
   }
-  return manifest;
 }
 
 export async function resolveManifest(options = {}) {
   const fetchImpl = options.fetchImpl || globalThis.fetch;
+  const timeoutMs = options.timeoutMs ?? 15000;
   const pageUrl = options.pageUrl || globalThis.location.href;
   const directoryUrl = new URL('.', pageUrl);
-  const current = await fetchManifest(fetchImpl, new URL('./manifest.json', directoryUrl).href);
+  const current = await fetchManifest(fetchImpl, new URL('./manifest.json', directoryUrl).href, timeoutMs);
   if (!Array.isArray(current.previous_versions) || current.previous_versions.length === 0) {
     return {manifest: current, resumedVersion: null};
   }
   const now = options.now ?? Date.now();
   let storage;
   try { storage = options.storage ?? globalThis.sessionStorage; }
-  catch (cause) { throw new DraftRecoveryError('暂时无法检查上一版填写进度。原有记录未被清除，请刷新页面重试。', cause); }
+  catch (cause) { throw new DraftRecoveryError('浏览器暂不允许读取临时草稿，无法检查上一版填写进度。原有记录未被清除。', cause, 'storage_unavailable'); }
   for (const previous of current.previous_versions) {
     if (!plain(previous) || typeof previous.version !== 'string' || !VERSION_RE.test(previous.version) || previous.version === current.version) continue;
     let raw;
     try { raw = storage.getItem(`vignette-draft:${current.study_id}:${previous.version}`); }
-    catch (cause) { throw new DraftRecoveryError('暂时无法检查上一版填写进度。原有记录未被清除，请刷新页面重试。', cause); }
+    catch (cause) { throw new DraftRecoveryError('浏览器暂不允许读取临时草稿，无法检查上一版填写进度。原有记录未被清除。', cause, 'storage_unavailable'); }
     if (!raw) continue;
     let draft;
     try { draft = JSON.parse(raw); } catch { continue; }
@@ -92,7 +99,7 @@ export async function resolveManifest(options = {}) {
       if (archiveUrl.origin !== directoryUrl.origin || !archiveUrl.pathname.startsWith(directoryUrl.pathname)) {
         throw new Error('Archive must stay inside this site');
       }
-      const archived = await fetchManifest(fetchImpl, archiveUrl.href);
+      const archived = await fetchManifest(fetchImpl, archiveUrl.href, timeoutMs);
       if (archived.study_id !== current.study_id || archived.version !== previous.version ||
           archived.status !== 'open' || archived.is_test !== draft.session.is_test ||
           typeof archived.consent !== 'string' || !archived.consent.trim() ||

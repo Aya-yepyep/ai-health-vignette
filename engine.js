@@ -1,5 +1,6 @@
 import { requestCollection, CollectionError } from './api.js';
-import { buildFeedback, appendFeedback, RULE_VERSION } from './feedback.js';
+import { buildFeedback, appendFeedback, SUPPORTED_RULES } from './feedback.js';
+import { mountScenario, scenarioFieldIds } from './scenario.js';
 
 const TOKEN_RE = /^[0-9a-f]{64}$/;
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -71,10 +72,13 @@ export function mountQuestionnaire(manifest, options = {}) {
   const api = options.request || requestCollection;
   const app = document.getElementById('app');
   const storageKey = `vignette-draft:${manifest.study_id}:${manifest.version}`;
-  let storageAvailable = true, draft = {token: null, session: null, answers: {}, step: 0, receipt: null};
+  let storageAvailable = options.storageAvailable !== false;
+  let storage;
+  let draft = {token: null, session: null, answers: {}, step: 0, receipt: null};
   let busy = false, statusNode;
   try {
-    const restored = JSON.parse(sessionStorage.getItem(storageKey) || 'null');
+    storage = options.storage !== undefined ? options.storage : sessionStorage;
+    const restored = JSON.parse(storage.getItem(storageKey) || 'null');
     if (plain(restored) && TOKEN_RE.test(restored.token) && plain(restored.answers)) {
       if (restored.session) validateSession(restored.session, manifest);
       draft = {...draft, ...restored};
@@ -84,23 +88,23 @@ export function mountQuestionnaire(manifest, options = {}) {
   } catch { storageAvailable = false; }
 
   function persist() {
-    try { sessionStorage.setItem(storageKey, JSON.stringify(draft)); }
+    try { storage.setItem(storageKey, JSON.stringify(draft)); }
     catch { storageAvailable = false; }
   }
-  function clear() { try { sessionStorage.removeItem(storageKey); } catch {} draft = {token: null, session: null, answers: {}, step: 0, receipt: null}; }
+  function clear() { try { storage.removeItem(storageKey); } catch {} draft = {token: null, session: null, answers: {}, step: 0, receipt: null}; }
   function error(message) { statusNode.textContent = message; statusNode.hidden = false; statusNode.focus(); }
   function setBusy(value) {
     busy = value; app.setAttribute('aria-busy', String(value));
     app.querySelectorAll('button,input').forEach(node => { node.disabled = value || node.dataset.locked === 'true'; });
   }
-  function screen(title, {step, total} = {}) {
+  function screen(title, {step, total, phase = '填写进度'} = {}) {
     app.replaceChildren(); app.setAttribute('aria-busy', 'false');
     app.append(el('p', manifest.is_test ? '连接测试 · 不计入正式研究' : 'RESEARCH QUESTIONNAIRE', 'eyebrow'));
     if (manifest.pilot) app.append(el('p', '预测试新稿 · 本问卷题目尚在验证中', 'pilot-banner'));
     if (typeof step === 'number') {
-      const label = el('div', undefined, 'progress-label'); label.append(el('span', '填写进度'), el('span', `${step} / ${total}`));
+      const label = el('div', undefined, 'progress-label'); label.append(el('span', phase), el('span', `${step} / ${total}`));
       const track = el('div', undefined, 'progress-track'); const fill = el('div', undefined, 'progress-fill');
-      track.setAttribute('role', 'progressbar'); track.setAttribute('aria-label', '填写进度');
+      track.setAttribute('role', 'progressbar'); track.setAttribute('aria-label', phase);
       track.setAttribute('aria-valuemin', '0'); track.setAttribute('aria-valuemax', String(total)); track.setAttribute('aria-valuenow', String(step));
       fill.style.width = `${step / total * 100}%`; track.append(fill); app.append(label, track);
     }
@@ -125,7 +129,8 @@ export function mountQuestionnaire(manifest, options = {}) {
       button('返回问卷说明', intro, 'secondary'));
   }
   function getSections() {
-    const fields = draft.session.fields;
+    const interactiveIds = new Set(scenarioFieldIds(draft.session));
+    const fields = draft.session.fields.filter(field => !interactiveIds.has(field.id));
     const fieldMap = new Map(fields.map(f => [f.id, f]));
     const seen = new Set(), sections = [];
     if (Array.isArray(manifest.sections)) {
@@ -224,16 +229,22 @@ export function mountQuestionnaire(manifest, options = {}) {
     return fieldset;
   }
   function renderStep() {
-    const sections = getSections(), total = sections.length + 2;
+    const sections = getSections(), interactive = Boolean(draft.session.condition.scenario_steps?.length);
+    const total = sections.length + (interactive ? 1 : 2);
     if (draft.step > sections.length + 1) draft.step = sections.length + 1;
     if (draft.step === 0) {
+      if (draft.session.condition.scenario_steps?.length) {
+        mountScenario({app,session:draft.session,manifest,draft,persist,screen,onExit:exit,
+          onDone:()=>{draft.step=1;persist();renderStep();}});
+        return;
+      }
       screen('请阅读以下情景', {step: 1, total});
       app.append(el('p', manifest.vignette_instruction || '请仔细阅读，并设想自己处于这一情景中。接下来的问题将围绕这一情景展开。', 'muted'), vignette());
       const actions = el('div', undefined, 'actions'); actions.append(button('退出并清除进度', exit, 'text'), button('已阅读，继续', () => {draft.step = 1; persist(); renderStep();})); app.append(actions); return;
     }
     if (draft.step === sections.length + 1) { review(sections); return; }
     const section = sections[draft.step - 1];
-    screen(section.title, {step: draft.step + 1, total});
+    screen(section.title, {step: draft.step + (interactive ? 0 : 1), total});
     if (section.description) app.append(el('p', section.description, 'muted'));
     app.append(vignetteDetails());
     const form = el('form'); let offset = sections.slice(0, draft.step - 1).reduce((n, s) => n + s.items.length, 0);
@@ -245,15 +256,26 @@ export function mountQuestionnaire(manifest, options = {}) {
     form.addEventListener('submit', event => {event.preventDefault(); if (form.reportValidity()) { draft.step++; persist(); renderStep(); }});
   }
   function review(sections) {
-    screen('提交前，请最后确认', {step: sections.length + 2, total: sections.length + 2});
+    const total=sections.length+(draft.session.condition.scenario_steps?.length?1:2);
+    screen('提交前，请最后确认', {step: total, total});
     app.append(el('p', '请确认已按自己的真实想法完成填写。提交后本次答卷将被保存。', 'muted'));
+    const interactiveIds = new Set(scenarioFieldIds(draft.session));
+    const interactive = draft.session.fields.filter(field => interactiveIds.has(field.id));
+    const missingInteractive = interactive.some(field => !field.options.includes(draft.answers[field.id]));
+    if (interactive.length) {
+      app.append(el('h2','情景中的三个选择'));
+      const choices = el('ul',undefined,'review-list');
+      interactive.forEach(field=>{const item=el('li',undefined,'review-item');item.append(el('span',field.label),el('strong',valueLabel(field,draft.answers[field.id])));choices.append(item);});
+      app.append(choices);
+    }
+    if (missingInteractive) app.append(el('p','还有情景选择未完成，请返回补充。','notice'),button('返回情景',()=>{draft.step=0;persist();renderStep();},'secondary'));
     const list = el('ul', undefined, 'review-list');
     sections.flatMap(s => s.items).forEach(field => { const item = el('li', undefined, 'review-item'); item.append(el('span', field.label), el('strong', valueLabel(field, draft.answers[field.id]))); list.append(item); });
     app.append(list);
     const actions = el('div', undefined, 'actions'), navigation = el('div', undefined, 'action-group');
     navigation.append(button('返回修改', () => {draft.step--; persist(); renderStep();}, 'secondary'));
     const submit = button('确认并提交', async () => {
-      if (busy) return;
+      if (busy || missingInteractive) return;
       // Freeze the payload before the request so an ambiguous network failure
       // can be retried with the same session and the exact same answers.
       if (!draft.pendingAnswers) draft.pendingAnswers = structuredClone(draft.answers);
@@ -263,8 +285,8 @@ export function mountQuestionnaire(manifest, options = {}) {
         if (!UUID_RE.test(result.receipt_id) || !Number.isFinite(Date.parse(result.submitted_at))) {
           throw new CollectionError('暂未收到有效的保存凭证。请保留页面并重试。');
         }
-        if (manifest.feedback_rule_version === RULE_VERSION) {
-          try { draft.feedback = buildFeedback(draft.pendingAnswers); }
+        if (SUPPORTED_RULES.includes(manifest.feedback_rule_version)) {
+          try { draft.feedback = buildFeedback(draft.pendingAnswers,{ruleVersion:manifest.feedback_rule_version}); }
           catch { draft.feedback = null; }
         }
         draft.receipt = {receipt_id: result.receipt_id, submitted_at: result.submitted_at};
@@ -294,8 +316,8 @@ export function mountQuestionnaire(manifest, options = {}) {
     app.append(el('p', manifest.is_test ? '这是一份连接测试数据，不计入正式研究。' : '感谢你的时间与认真作答。系统已收到并保存本次答卷。', 'muted'));
     app.append(el('p', '提交凭证', 'helper'), el('div', draft.receipt.receipt_id, 'receipt'));
     if (manifest.debrief) app.append(el('div', manifest.debrief, 'notice'));
-    if (manifest.feedback_rule_version === RULE_VERSION) {
-      if (draft.feedback?.rule_version === RULE_VERSION) appendFeedback(app, draft.feedback);
+    if (SUPPORTED_RULES.includes(manifest.feedback_rule_version)) {
+      if (SUPPORTED_RULES.includes(draft.feedback?.rule_version)) appendFeedback(app, draft.feedback);
       else app.append(el('p','答卷已保存，但本标签页的结果数据不完整，暂时无法生成协作反馈。请勿为获取反馈重复提交答卷。','notice'));
     }
     app.append(button('清除本页记录', () => {clear(); screen('本页记录已清除'); app.append(el('p', '已提交的答卷仍保存在研究数据库中。你可以关闭本标签页。', 'muted'));}, 'secondary'));
