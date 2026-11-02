@@ -97,6 +97,9 @@ async function start(body: any) {
   const lookup = query('vignette_sessions', { token_hash: `eq.${tokenHash}` });
   let sessions = await db(lookup);
   if (!sessions.length) {
+    // A retired version may still accept issued sessions and their safe start
+    // retries. The registry flag only prevents allocating a new session.
+    if (manifest.accept_new_sessions === false) throw new ClientError('study_unavailable', 409);
     const condition = randomCondition(manifest.conditions);
     try {
       sessions = await db('vignette_sessions', 'POST', {

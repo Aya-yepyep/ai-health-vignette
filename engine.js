@@ -1,4 +1,5 @@
 import { requestCollection, CollectionError } from './api.js';
+import { buildFeedback, appendFeedback, RULE_VERSION } from './feedback.js';
 
 const TOKEN_RE = /^[0-9a-f]{64}$/;
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -262,6 +263,10 @@ export function mountQuestionnaire(manifest, options = {}) {
         if (!UUID_RE.test(result.receipt_id) || !Number.isFinite(Date.parse(result.submitted_at))) {
           throw new CollectionError('暂未收到有效的保存凭证。请保留页面并重试。');
         }
+        if (manifest.feedback_rule_version === RULE_VERSION) {
+          try { draft.feedback = buildFeedback(draft.pendingAnswers); }
+          catch { draft.feedback = null; }
+        }
         draft.receipt = {receipt_id: result.receipt_id, submitted_at: result.submitted_at};
         draft.answers = {}; delete draft.pendingAnswers; persist(); setBusy(false); complete();
       } catch (cause) {
@@ -289,6 +294,10 @@ export function mountQuestionnaire(manifest, options = {}) {
     app.append(el('p', manifest.is_test ? '这是一份连接测试数据，不计入正式研究。' : '感谢你的时间与认真作答。系统已收到并保存本次答卷。', 'muted'));
     app.append(el('p', '提交凭证', 'helper'), el('div', draft.receipt.receipt_id, 'receipt'));
     if (manifest.debrief) app.append(el('div', manifest.debrief, 'notice'));
+    if (manifest.feedback_rule_version === RULE_VERSION) {
+      if (draft.feedback?.rule_version === RULE_VERSION) appendFeedback(app, draft.feedback);
+      else app.append(el('p','答卷已保存，但本标签页的结果数据不完整，暂时无法生成协作反馈。请勿为获取反馈重复提交答卷。','notice'));
+    }
     app.append(button('清除本页记录', () => {clear(); screen('本页记录已清除'); app.append(el('p', '已提交的答卷仍保存在研究数据库中。你可以关闭本标签页。', 'muted'));}, 'secondary'));
   }
   if (draft.receipt) complete(); else intro();
